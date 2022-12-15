@@ -22,7 +22,11 @@ class MusicLibrary
     def search(keyword) 
       matching_tracks = []
       @track_list.flat_map do |item|
-        item.matches?
+        joined = item.join(", ")
+        if joined.include?(keyword)
+          matching_tracks << joined
+        end
       end
+      return matching_tracks
     end
   end
