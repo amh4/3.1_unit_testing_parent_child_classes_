@@ -1,50 +1,27 @@
-require 'music_library'
+require_relative '../lib/music_library'
+require_relative '../lib/track'
 
 describe "Music library" do
-    it "adds a track and then returns all tracks" do
-        track = FakeTrack.new
-        library = MusicLibrary.new
-        library.add(track)
-        expect(library.all).to eq [["Hello", "Lionel Richie"]]
+	it "adds a track and then returns all tracks" do
+		track_1 = double :track
+		track_2 = double :track
+		library = MusicLibrary.new
+		library.add(track_1)
+		library.add(track_2)
+		expect(library.all).to eq [track_1, track_2]
+	end
+
+	it "searches track that match" do
+		library = MusicLibrary.new
+		track_1 = double :track
+		expect(track_1).to receive(:matches?).with("two").and_return(true)
+		track_2 = double :track
+		expect(track_2).to receive(:matches?).with("two").and_return(false)
+		library.add(track_1)
+		library.add(track_2)
+		expect(library.search("two")).to eq [track_1]
     end
 
-    it "adds two tracks then returns all tracks" do
-        track = FakeTrack.new
-        library = MusicLibrary.new
-        library.add(track)
-        library.add(track)
-        expect(library.all).to eq [["Hello", "Lionel Richie"], ["Hello", "Lionel Richie"]]
-    end
-
-    it "adds two tracks then returns all tracks" do
-      track = FakeTrack.new
-      track2 = FakeTrack2.new
-      library = MusicLibrary.new
-      library.add(track)
-      library.add(track2)
-      keyword = "Lionel"
-      expect(library.search(keyword)).to eq ["Hello, Lionel Richie"]
-  end
 end
 
-class FakeTrack
-    def initialize
-        @title = 'Hello'
-        @artist = 'Lionel Richie'
-    end
 
-    def matches?(keyword) 
-      return true
-    end
-end
-
-class FakeTrack2
-    def initialize
-        @title = 'ABC'
-        @artist = 'Jackson 5'
-    end
-
-    def matches?(keyword) 
-      return true
-    end
-end

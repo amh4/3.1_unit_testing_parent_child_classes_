@@ -6,6 +6,12 @@ RSpec.describe "Track" do
     keyword = "Hello"
     expect(track.matches?(keyword)).to eq true
   end
+  
+  it "returns fakse if keyword doesn't match title or artist" do
+    track = Track.new("Lionel Richie", "Hello")
+    keyword = "Bye"
+    expect(track.matches?(keyword)).to eq false
+  end
 
   it "returns an error if keyword is empty" do
     track = Track.new("Lionel Richie", "Hello")
